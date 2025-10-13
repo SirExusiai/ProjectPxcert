@@ -1,4 +1,0 @@
-repository "美丽新世界@tj_sirexusiai@cloud.cn"
-  path "/"
-    br "/main"
-    co "/main"
