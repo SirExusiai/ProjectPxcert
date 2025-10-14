@@ -7,12 +7,14 @@ public class GameData
 {
     public float[] playerPosition; // 用一个浮点数数组来存储 Vector3
 
+    public int day; // 新增
     // 构造函数，当创建 GameData 实例时调用
-    public GameData(Vector3 position)
+    public GameData(Vector3 position , int currentDay)
     {
         playerPosition = new float[3];
         playerPosition[0] = position.x;
         playerPosition[1] = position.y;
         playerPosition[2] = position.z;
+        day = currentDay; // 新增
     }
 }

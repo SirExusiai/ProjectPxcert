@@ -9,6 +9,22 @@ public class UIManager : MonoBehaviour
     // 将你的 DialogText 文本组件拖拽到这里
     public TextMeshProUGUI dialogText;
 
+    // --- 新增 ---
+    [Header("游戏状态UI")]
+    public TextMeshProUGUI dayCounterText;
+    void Start()
+    {
+        // 场景加载时，立即更新一次UI
+        UpdateDayUI();
+    }
+
+    public void UpdateDayUI()
+    {
+        if (dayCounterText != null)
+        {
+            dayCounterText.text = "第 " + GameManager.currentDay + " 天";
+        }
+    }
     // 一个公开的方法，用于显示对话框
     // 参数 message 是要显示的对话内容
     public void ShowDialog(string message)

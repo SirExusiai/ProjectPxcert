@@ -56,6 +56,7 @@ public class PlayerController : MonoBehaviour
             position.y = data.playerPosition[1];
             position.z = data.playerPosition[2];
             transform.position = position;
+            GameManager.currentDay = data.day;
         }
     }
 

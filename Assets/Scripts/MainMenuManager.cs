@@ -12,6 +12,7 @@ public class MainMenuManager : MonoBehaviour
     // 添加一个静态变量，用于在场景切换时传递信息
     public static bool shouldLoadGame = false;
 
+    
     void Start()
     {
         // 构造存档文件的完整路径
@@ -32,9 +33,20 @@ public class MainMenuManager : MonoBehaviour
 
     public void StartGame()
     {
-        // 开始新游戏时，确保加载标志为 false
+        // --- 核心修改在这里 ---
+        // 在开始一个全新的游戏时，重置所有跨场景的位置信息
+        GameManager.hasNextPosition = false;
+        GameManager.nextPlayerPosition = Vector3.zero;
+
+        // --- 新增：重置天数 ---
+        GameManager.currentDay = 1;
+
         shouldLoadGame = false;
         SceneManager.LoadScene(gameSceneName);
+        
+        // 开始新游戏时，确保加载标志为 false (这句代码已存在)
+        shouldLoadGame = false;
+        SceneManager.LoadScene(gameSceneName); // gameSceneName 应该设为你的“初始房间”场景名
     }
 
     // 这个方法将关联到“继续游戏”按钮的 OnClick 事件

@@ -21,12 +21,13 @@ public static class SaveSystem
         // 创建文件流来写入文件
         using (FileStream stream = new FileStream(path, FileMode.Create))
         {
-            // 从玩家当前状态创建 GameData 实例
-            GameData data = new GameData(player.transform.position);
+            // 传入玩家位置和当前天数
+            GameData data = new GameData(player.transform.position, GameManager.currentDay);
 
             // 将数据序列化并写入文件
             formatter.Serialize(stream, data);
         }
+        
     }
 
     // 读档方法
