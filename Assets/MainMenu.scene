@@ -1548,7 +1548,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f437f30238be9a4ebd5d1591bf3982f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameSceneName: GameScene
+  gameSceneName: Office
   continueButton: {fileID: 908140131}
 --- !u!4 &1945120410
 Transform:
