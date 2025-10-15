@@ -37,12 +37,14 @@ public class MainMenuManager : MonoBehaviour
         // 在开始一个全新的游戏时，重置所有跨场景的位置信息
         GameManager.hasNextPosition = false;
         GameManager.nextPlayerPosition = Vector3.zero;
+        GameManager.KeyItemQuestStatus = QuestState.NotStarted;
 
         // --- 新增：重置天数 ---
         GameManager.currentDay = 1;
 
         shouldLoadGame = false;
         SceneManager.LoadScene(gameSceneName);
+        GameManager.completedEvents.Clear();
         
         // 开始新游戏时，确保加载标志为 false (这句代码已存在)
         shouldLoadGame = false;
