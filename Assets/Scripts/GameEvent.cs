@@ -7,7 +7,7 @@ public enum GameEvent
     CompletedMirrorNPCDialogue, // 完成了镜子NPC的对话
     DayTwoStarted, // 第二天已开始
     CompletedBirdMan, // 与鸟人对话完成
-    RepairedTheBridge // 修好了桥
-    
+    RepairedTheBridge,// 修好了桥
+    与工作台交互
     // ... 未来你可以根据需要在这里添加更多事件
 }

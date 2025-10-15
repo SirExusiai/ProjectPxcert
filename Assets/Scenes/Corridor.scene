@@ -1843,7 +1843,7 @@ MonoBehaviour:
   rules:
   - ruleName: Day 1 to Plaza
     requiredConditions:
-    - eventToCheck: 2
+    - eventToCheck: 3
       checkType: 1
     - eventToCheck: 1
       checkType: 0
