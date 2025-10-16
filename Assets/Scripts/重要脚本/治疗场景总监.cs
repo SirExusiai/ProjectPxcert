@@ -2,17 +2,19 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class SceneInteractionManager : MonoBehaviour
+// 【關鍵修正】類別名稱已從 SceneInteractionManager 修改為與檔案名稱一致的 "治疗场景总监"
+public class 治疗场景总监 : MonoBehaviour
 {
     [Header("場景組件")]
-    public ToolbarController toolbar;
+    // 【關鍵修正】變數類型已修改為對應的中文腳本名稱
+    public 工具栏动画 toolbar;
     public CanvasGroup toolbarCanvasGroup;
-    public List<InteractableProp> allProps;
+    public List<可交互道具> allProps;
     public DialogueManager dialogueManager;
     
     [Header("擦除模式組件")]
-    public GameObject draggableArea; // 【重要】將 DraggableArea 物件拖到這裡
-    public DraggableMaskController maskController; // 【重要】將 DraggableArea 上的腳本拖到這裡
+    public GameObject draggableArea;
+    public UI拖动控制器 maskController;
 
     [Header("交互反饋")]
     public Dialogue wrongToolDialogue;
@@ -23,52 +25,38 @@ public class SceneInteractionManager : MonoBehaviour
     public Transform focusPoint;
 
     // 內部狀態變數
-    private InteractableProp selectedProp = null;
-    private ToolButton selectedTool = null;
+    // 【關鍵修正】變數類型已修改為對應的中文腳本名稱
+    private 可交互道具 selectedProp = null;
+    private 工具被选中行为 selectedTool = null;
 
-    // 用於儲存每個道具原始的渲染圖層設定
-    private Dictionary<InteractableProp, int> originalOrdersInLayer = new Dictionary<InteractableProp, int>();
-    private Dictionary<InteractableProp, string> originalSortingLayers = new Dictionary<InteractableProp, string>();
+    // 我們將渲染圖層的程式碼移除，以保持簡潔
+    // 如果你需要它，我們可以再加回來
 
     void Start()
     {
-        // 在遊戲開始時，遍歷所有道具並記下它們的原始圖層設定
-        foreach (var prop in allProps)
-        {
-            var renderer = prop.GetComponent<SpriteRenderer>();
-            if (renderer != null)
-            {
-                originalOrdersInLayer[prop] = renderer.sortingOrder;
-                originalSortingLayers[prop] = renderer.sortingLayerName;
-            }
-        }
+        // Start 方法目前是空的，因為我們移除了預先儲存圖層資訊的邏輯
     }
 
-    // 當一個道具被點擊時 (由 InteractableProp 的 OnMouseDown 呼叫)
-    public void SelectProp(InteractableProp prop)
+    // 當一個道具被點擊時
+    public void SelectProp(可交互道具 prop)
     {
-        // 只有在「閒置狀態」時才能選擇新道具
         if (selectedProp == null)
         {
             selectedProp = prop;
-            // 顯示工具欄時，確保它可以被點擊
             if (toolbarCanvasGroup != null) toolbarCanvasGroup.blocksRaycasts = true;
             toolbar.Show();
         }
     }
 
-    // 當一個工具被選中時 (由 ToolButton 的 OnPointerClick 呼叫)
-    public void SelectTool(ToolButton tool)
+    // 當一個工具被選中時
+    public void SelectTool(工具被选中行为 tool)
     {
         if (selectedProp == null) return;
 
         selectedTool = tool;
         toolbar.Hide();
-
-        // 工具被選中後，立刻讓工具欄不再阻擋滑鼠點擊
         if (toolbarCanvasGroup != null) toolbarCanvasGroup.blocksRaycasts = false;
 
-        // 核心判斷：工具是否正確？
         if (selectedTool.toolType == selectedProp.requiredTool)
         {
             StartCoroutine(FocusAndPrepareWipe(selectedProp));
@@ -87,20 +75,11 @@ public class SceneInteractionManager : MonoBehaviour
         foreach (var p in allProps)
         {
             p.ResetState(animDuration);
-
-            // 恢復所有道具的原始渲染層級
-            var renderer = p.GetComponent<SpriteRenderer>();
-            if (renderer != null && originalSortingLayers.ContainsKey(p))
-            {
-                renderer.sortingLayerName = originalSortingLayers[p];
-                renderer.sortingOrder = originalOrdersInLayer[p];
-            }
         }
         
         toolbar.Hide();
         if (toolbarCanvasGroup != null) toolbarCanvasGroup.blocksRaycasts = false;
         
-        // 重置時，禁用拖曳區域和其腳本
         if (draggableArea != null) draggableArea.SetActive(false);
         if (maskController != null) maskController.enabled = false;
 
@@ -109,17 +88,11 @@ public class SceneInteractionManager : MonoBehaviour
     }
 
     // 聚焦動畫並準備擦除的協程
-    private IEnumerator FocusAndPrepareWipe(InteractableProp propToFocus)
+    private IEnumerator FocusAndPrepareWipe(可交互道具 propToFocus)
     {
         Cursor.SetCursor(toolCursorTexture, Vector2.zero, CursorMode.Auto);
         if (toolbarCanvasGroup != null) toolbarCanvasGroup.blocksRaycasts = false;
         
-        var focusRenderer = propToFocus.GetComponent<SpriteRenderer>();
-        if (focusRenderer != null)
-        {
-            focusRenderer.sortingLayerName = "FocusedObject";
-        }
-
         foreach (var p in allProps)
         {
             if (p == propToFocus)
@@ -134,7 +107,6 @@ public class SceneInteractionManager : MonoBehaviour
 
         yield return new WaitForSeconds(animDuration);
 
-        // 啟用全新的拖曳系統
         if (draggableArea != null) draggableArea.SetActive(true);
         if (maskController != null) maskController.enabled = true;
     }
