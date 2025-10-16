@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class 工具栏动画 : MonoBehaviour
+public class ToolbarController : MonoBehaviour
 {
     public float moveDuration = 0.5f;
     public float hiddenYPosition = -150f;

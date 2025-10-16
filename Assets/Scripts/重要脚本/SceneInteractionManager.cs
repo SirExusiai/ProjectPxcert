@@ -3,18 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 
 // 【關鍵修正】類別名稱已從 SceneInteractionManager 修改為與檔案名稱一致的 "治疗场景总监"
-public class 治疗场景总监 : MonoBehaviour
+public class SceneInteractionManager : MonoBehaviour
 {
     [Header("場景組件")]
     // 【關鍵修正】變數類型已修改為對應的中文腳本名稱
-    public 工具栏动画 toolbar;
+    public ToolbarController toolbar;
     public CanvasGroup toolbarCanvasGroup;
-    public List<可交互道具> allProps;
+    public List<InteractableProp> allProps;
     public DialogueManager dialogueManager;
     
     [Header("擦除模式組件")]
     public GameObject draggableArea;
-    public UI拖动控制器 maskController;
+    public DraggableMaskController maskController;
 
     [Header("交互反饋")]
     public Dialogue wrongToolDialogue;
@@ -26,8 +26,8 @@ public class 治疗场景总监 : MonoBehaviour
 
     // 內部狀態變數
     // 【關鍵修正】變數類型已修改為對應的中文腳本名稱
-    private 可交互道具 selectedProp = null;
-    private 工具被选中行为 selectedTool = null;
+    private InteractableProp selectedProp = null;
+    private ToolButton selectedTool = null;
 
     // 我們將渲染圖層的程式碼移除，以保持簡潔
     // 如果你需要它，我們可以再加回來
@@ -38,7 +38,7 @@ public class 治疗场景总监 : MonoBehaviour
     }
 
     // 當一個道具被點擊時
-    public void SelectProp(可交互道具 prop)
+    public void SelectProp(InteractableProp prop)
     {
         if (selectedProp == null)
         {
@@ -49,7 +49,7 @@ public class 治疗场景总监 : MonoBehaviour
     }
 
     // 當一個工具被選中時
-    public void SelectTool(工具被选中行为 tool)
+    public void SelectTool(ToolButton tool)
     {
         if (selectedProp == null) return;
 
@@ -88,7 +88,7 @@ public class 治疗场景总监 : MonoBehaviour
     }
 
     // 聚焦動畫並準備擦除的協程
-    private IEnumerator FocusAndPrepareWipe(可交互道具 propToFocus)
+    private IEnumerator FocusAndPrepareWipe(InteractableProp propToFocus)
     {
         Cursor.SetCursor(toolCursorTexture, Vector2.zero, CursorMode.Auto);
         if (toolbarCanvasGroup != null) toolbarCanvasGroup.blocksRaycasts = false;

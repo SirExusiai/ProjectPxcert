@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class 可交互道具 : MonoBehaviour
+public class InteractableProp : MonoBehaviour
 {
     [Header("樣式")]
     public Sprite defaultSprite;
@@ -29,7 +29,7 @@ public class 可交互道具 : MonoBehaviour
     void OnMouseDown()
     {
         // 直接呼叫新場景總監的 OnPropClicked 方法，並把自己傳過去
-        FindObjectOfType<治疗场景总监>().SelectProp(this);
+        FindObjectOfType<SceneInteractionManager>().SelectProp(this);
     }
 
     // --- 新增：一個專門用於恢復初始狀態的方法 ---

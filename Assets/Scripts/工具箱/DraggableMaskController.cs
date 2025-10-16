@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UI拖动控制器 : MonoBehaviour, IDragHandler // <--- 類別名稱已修正
+public class DraggableMaskController : MonoBehaviour, IDragHandler // <--- 類別名稱已修正
 {
     [Header("要控制的目標")]
     public Transform targetMaskTransform; 
