@@ -28,6 +28,7 @@ public class InteractableProp : MonoBehaviour
     // 當被滑鼠點擊時，由總監呼叫 (此方法不變)
     void OnMouseDown()
     {
+        // 直接呼叫新場景總監的 OnPropClicked 方法，並把自己傳過去
         FindObjectOfType<SceneInteractionManager>().SelectProp(this);
     }
 

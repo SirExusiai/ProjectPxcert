@@ -29,7 +29,7 @@ public class ToolButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        // 通知“总监”我（这个具体的工具）被选中了
+        // 呼叫新場景總監的 OnToolSelected 方法，並把自己傳過去
         FindObjectOfType<SceneInteractionManager>().SelectTool(this);
     }
 }
