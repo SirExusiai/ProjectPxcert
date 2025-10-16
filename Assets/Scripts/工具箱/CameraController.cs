@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [Header("跟随目标")]
-    public Transform target; 
+    // [Header("跟随目标")]  <--- 我们不再需要这个公开变量了
+    // public Transform target; 
+    private Transform target; // 将 target 变成一个私有变量，脚本会自动寻找它
 
     [Header("移动平滑度")]
     [Range(0.01f, 1.0f)]
@@ -18,38 +19,51 @@ public class CameraController : MonoBehaviour
 
     private float minX;
     private float maxX;
+    private Camera cam; // 把 Camera 组件缓存起来，提高性能
 
     void Start()
     {
-        // --- 边界计算 (这部分代码已存在) ---
-        float camHalfHeight = GetComponent<Camera>().orthographicSize;
-        float camHalfWidth = camHalfHeight * GetComponent<Camera>().aspect;
+        // === 优化的核心部分：自动寻找唯一的玩家实例 ===
+        // 1. 检查 PlayerController 的单例是否存在
+        if (PlayerController.instance != null)
+        {
+            // 2. 如果存在，就将它的 transform 设为我们的跟随目标
+            target = PlayerController.instance.transform;
+            Debug.Log("CameraController 成功找到玩家！");
+        }
+        else
+        {
+            // 3. 如果由于某种原因没找到，打印一个错误方便调试
+            Debug.LogError("CameraController 无法在场景中找到 PlayerController 的实例！");
+        }
+        
+        // --- 缓存 Camera 组件 ---
+        cam = GetComponent<Camera>();
+
+        // --- 边界计算 (这部分代码保持不变) ---
+        float camHalfHeight = cam.orthographicSize;
+        float camHalfWidth = camHalfHeight * cam.aspect;
         minX = leftBoundary.position.x + camHalfWidth;
         maxX = rightBoundary.position.x - camHalfWidth;
 
-        // --- 新增的“瞬间归位”逻辑 ---
-        // 在游戏开始的第一帧，立即将摄像机设置到正确的位置
+        // --- 瞬间归位逻辑 (现在更加健壮了) ---
         if (target != null)
         {
-            // 1. 计算出理想的初始位置
             Vector3 initialPosition = target.position + offset;
-
-            // 2. 同样要确保初始位置也遵守边界限制
             initialPosition.x = Mathf.Clamp(initialPosition.x, minX, maxX);
-            
-            // 3. 直接赋值，而不是平滑移动。这会瞬间完成，玩家看不到过程。
             transform.position = initialPosition;
         }
     }
 
     void LateUpdate()
     {
+        // 检查目标是否存在，如果不存在（比如玩家正在被销毁），就什么都不做
         if (target == null)
         {
             return;
         }
 
-        // --- 以下的平滑跟随逻辑保持不变 ---
+        // --- 平滑跟随逻辑 (保持不变) ---
         Vector3 desiredPosition = target.position + offset;
         desiredPosition.x = Mathf.Clamp(desiredPosition.x, minX, maxX);
         Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
