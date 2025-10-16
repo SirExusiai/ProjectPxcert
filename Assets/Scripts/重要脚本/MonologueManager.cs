@@ -20,7 +20,7 @@ public class MonologuePlayer : MonoBehaviour
         if (sentencesToPlay == null || sentencesToPlay.Length == 0)
         {
             Debug.LogError("没有要播放的句子！将直接返回。");
-            ReturnToPreviousScene();
+            FinishMonologue();
             return;
         }
 
@@ -39,7 +39,7 @@ public class MonologuePlayer : MonoBehaviour
         }
 
         // 播放完毕，返回之前的场景
-        ReturnToPreviousScene();
+        FinishMonologue();
     }
 
     IEnumerator TypeSentence(string sentence)
@@ -52,25 +52,40 @@ public class MonologuePlayer : MonoBehaviour
         }
     }
 
-    private void ReturnToPreviousScene()
+    private void FinishMonologue()
     {
-        // 检查“记事本”里是否记录了要返回的场景
-        if (!string.IsNullOrEmpty(GameManager.sceneToReturnTo))
+        // --- 核心修改：读取“指令牌”并执行 ---
+        switch (GameManager.actionAfterMonologue)
         {
-            SceneManager.LoadScene(GameManager.sceneToReturnTo);
-        }
-        else
-        {
-            // 作为安全保障，如果记录丢失，则返回主菜单
-            Debug.LogError("要返回的场景名丢失！将返回主菜单。");
-            SceneManager.LoadScene("MainMenu"); 
-        }
-        // 在返回之前，更新全局任务状态
-        GameManager.KeyItemQuestStatus = QuestState.MonologueDone;
+            case PostMonologueAction.ReturnToPreviousScene:
+                if (!string.IsNullOrEmpty(GameManager.sceneToReturnTo))
+                {
+                    SceneManager.LoadScene(GameManager.sceneToReturnTo);
+                }
+                else
+                {
+                    Debug.LogError("要返回的场景名丢失！将返回主菜单。");
+                    SceneManager.LoadScene("MainMenu");
+                }
+                break;
 
-        if (!string.IsNullOrEmpty(GameManager.sceneToReturnTo))
-        {
-            SceneManager.LoadScene(GameManager.sceneToReturnTo);
+            case PostMonologueAction.LoadNewScene:
+                if (!string.IsNullOrEmpty(GameManager.newSceneAfterMonologue))
+                {
+                    SceneManager.LoadScene(GameManager.newSceneAfterMonologue);
+                }
+                else
+                {
+                    Debug.LogError("要加载的新场景名丢失！将返回主菜单。");
+                    SceneManager.LoadScene("MainMenu");
+
+                }
+                break;
+            
+            default:
+                Debug.LogError("未知的独白后行为！将返回主菜单。");
+                SceneManager.LoadScene("MainMenu");
+                break;
         }
     }
 }

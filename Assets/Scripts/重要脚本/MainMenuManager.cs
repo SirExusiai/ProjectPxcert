@@ -49,6 +49,10 @@ public class MainMenuManager : MonoBehaviour
         // 开始新游戏时，确保加载标志为 false (这句代码已存在)
         shouldLoadGame = false;
         SceneManager.LoadScene(gameSceneName); // gameSceneName 应该设为你的“初始房间”场景名
+        
+        // 在 MainMenuManager.cs 的 StartGame() 中
+        GameManager.actionAfterMonologue = PostMonologueAction.ReturnToPreviousScene; // 默认设为返回
+        GameManager.newSceneAfterMonologue = "";
     }
 
     // 这个方法将关联到“继续游戏”按钮的 OnClick 事件

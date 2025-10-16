@@ -8,6 +8,13 @@ public enum GameEvent
     DayTwoStarted, // 第二天已开始
     CompletedBirdMan, // 与鸟人对话完成
     RepairedTheBridge,// 修好了桥
-    与工作台交互
+    
+    与工作台交互,
+    测试事件
     // ... 未来你可以根据需要在这里添加更多事件
+}
+public enum PostMonologueAction
+{
+    ReturnToPreviousScene,
+    LoadNewScene
 }

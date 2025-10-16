@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public static string sceneToReturnTo; // 记录要返回的场景名
     // --- 新增：用于追踪特定任务是否激活的旗帜 ---
     public static QuestState KeyItemQuestStatus = QuestState.NotStarted;
+    public static PostMonologueAction actionAfterMonologue;
+    public static string newSceneAfterMonologue; // 如果是加载新场景，这是目标场景名
     
     public static void CompleteEvent(GameEvent eventToComplete)
     {
